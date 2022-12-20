@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    UserDao userDao = new UserDaoJDBCImpl();
+    private final static UserDao userDao = new UserDaoJDBCImpl();
     public void createUsersTable() {
         userDao.createUsersTable();
     }
@@ -28,12 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<User> getAllUsers() {
-        List<User> users = userDao.getAllUsers();
-        if (!users.isEmpty()) {
-            return users;
-        } else {
-            return Collections.emptyList();
-        }
+        return userDao.getAllUsers();
     }
 
     public void cleanUsersTable() {
