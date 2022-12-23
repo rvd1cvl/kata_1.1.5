@@ -1,7 +1,10 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.UserDao;
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.HibernateUtil;
 import org.hibernate.Session;
 
 import javax.transaction.Transaction;
@@ -10,24 +13,21 @@ import java.sql.SQLException;
 import static jm.task.core.jdbc.dao.UserDaoJDBCImpl.connection;
 
 public class Main {
-    private static final UserService userService = new UserServiceImpl();
     public static void main(String[] args) {
-        Transaction transaction = null;
 
+        HibernateUtil.getSessionFactory();
+        UserDao userDao = new UserDaoHibernateImpl();
 
+        userDao.createUsersTable();
 
-        userService.saveUser("aboba", "testLastName1", (byte) 18);
-        userService.saveUser("aboba", "testLastName2", (byte) 18);
-        userService.saveUser("aboba", "testLastName3", (byte) 18);
-        userService.saveUser("aboba", "testLastName4", (byte) 18);
+        userDao.saveUser("Aboba1", "lastName1", (byte) 18);
+        userDao.saveUser("Aboba2", "lastName2", (byte) 18);
+        userDao.saveUser("Aboba3", "lastName3", (byte) 18);
+        userDao.saveUser("Aboba4", "lastName4", (byte) 18);
 
-        userService.getAllUsers();
-        userService.cleanUsersTable();
-        userService.dropUsersTable();
-        try {
-            connection.close();
-        } catch (SQLException e) {
-
-        }
+        userDao.removeUserById(2);
+        userDao.getAllUsers();
+        userDao.cleanUsersTable();
+        userDao.dropUsersTable();
     }
 }
